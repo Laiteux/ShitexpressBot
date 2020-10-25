@@ -52,7 +52,7 @@ namespace ShitexpressBot
                         await order.HandleReplyAsync(message.ReplyToMessage.MessageId, message.From.Id, message.Text);
                     }
                 }
-                else if (message.Text != null && message.Text == "/order" || message.Text == $"/order@{Settings.Bot.Username}")
+                else if (message.Text != null && (message.Text == "/order" || message.Text == $"/order@{Settings.Bot.Username}"))
                 {
                     var orderMessage = await _bot.SendTextMessageAsync(message.Chat, "💩");
 
