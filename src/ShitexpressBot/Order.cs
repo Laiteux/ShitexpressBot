@@ -165,9 +165,7 @@ namespace ShitexpressBot
             }
             else if (property == "Email")
             {
-                var emailAddressAttribute = new EmailAddressAttribute();
-
-                if (!emailAddressAttribute.IsValid(text))
+                if (!new EmailAddressAttribute().IsValid(text))
                 {
                     await _bot.SendTextMessageAsync(_orderMessage.Chat, "Invalid email address.");
 
@@ -178,7 +176,7 @@ namespace ShitexpressBot
             }
             else
             {
-                this.GetType().GetProperty(property).SetValue(this, text);
+                GetType().GetProperty(property).SetValue(this, text);
             }
 
             await UpdateMessageAsync();

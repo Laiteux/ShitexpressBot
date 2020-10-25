@@ -140,7 +140,7 @@ namespace ShitexpressBot
                     new InlineQueryResultArticle(inlineQuery.Query, inlineQuery.Query, new InputTextMessageContent(text.ToString())
                     {
                         ParseMode = ParseMode.Markdown
-                    }),
+                    })
                 });
             }
             catch { }
