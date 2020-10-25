@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Text;
@@ -24,7 +25,7 @@ namespace ShitexpressBot
 
         public static void Main()
         {
-            Settings = JsonSerializer.Deserialize<Settings>(File.ReadAllText("Settings.json"));
+            Settings = JsonSerializer.Deserialize<Settings>(File.ReadAllText(Path.Combine("Files", "Settings.json")));
 
             _bot = new TelegramBotClient(Settings.Bot.Token);
 
@@ -52,15 +53,27 @@ namespace ShitexpressBot
                         await order.HandleReplyAsync(message.ReplyToMessage.MessageId, message.From.Id, message.Text);
                     }
                 }
-                else if (message.Text != null && (message.Text == "/order" || message.Text == $"/order@{Settings.Bot.Username}"))
+                else if (message.Text != null)
                 {
-                    var orderMessage = await _bot.SendTextMessageAsync(message.Chat, "💩");
+                    if (message.Text == "/start")
+                    {
+                        if (message.Chat.Type != ChatType.Private)
+                        {
+                            return;
+                        }
 
-                    var order = new Order(_bot, orderMessage, message.From.Id);
+                        await _bot.SendTextMessageAsync(message.Chat, File.ReadAllText(Path.Combine("Files", "Start.txt")), ParseMode.Markdown);
+                    }
+                    else if (message.Text == "/order" || message.Text == $"/order@{Settings.Bot.Username}")
+                    {
+                        var orderMessage = await _bot.SendTextMessageAsync(message.Chat, "💩");
 
-                    await order.UpdateMessageAsync();
+                        var order = new Order(_bot, orderMessage, message.From.Id);
 
-                    _orders.Add(orderMessage, order);
+                        await order.UpdateMessageAsync();
+
+                        _orders.Add(orderMessage, order);
+                    }
                 }
             }
             catch { }
