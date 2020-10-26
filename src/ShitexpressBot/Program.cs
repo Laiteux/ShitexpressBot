@@ -62,7 +62,7 @@ namespace ShitexpressBot
                             return;
                         }
 
-                        await _bot.SendTextMessageAsync(message.Chat, File.ReadAllText(Path.Combine("Files", "Start.txt")), ParseMode.Markdown);
+                        await _bot.SendTextMessageAsync(message.Chat, File.ReadAllText(Path.Combine("Files", "Start.txt")), ParseMode.Markdown, disableWebPagePreview: true);
                     }
                     else if (message.Text == "/order" || message.Text == $"/order@{Settings.Bot.Username}")
                     {
