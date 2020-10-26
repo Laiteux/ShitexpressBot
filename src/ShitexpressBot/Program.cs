@@ -117,8 +117,7 @@ namespace ShitexpressBot
 
                 if (contentString == string.Empty)
                 {
-                    text.AppendLine("Order not found - wrong ID.")
-                        .AppendLine("Try again, please.");
+                    text.AppendLine("Order not found - wrong ID. Try again, please.");
                 }
                 else
                 {

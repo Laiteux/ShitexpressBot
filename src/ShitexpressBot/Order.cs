@@ -97,6 +97,8 @@ namespace ShitexpressBot
         {
             if (callbackQuery.From.Id != _userId)
             {
+                await _bot.AnswerCallbackQueryAsync(callbackQuery.Id);
+
                 return;
             }
 
@@ -128,6 +130,8 @@ namespace ShitexpressBot
                     await EditPropertyAsync(callbackQuery.Id, callbackQuery.Data.Split('_', 2).Last());
                 }
             }
+
+            await _bot.AnswerCallbackQueryAsync(callbackQuery.Id);
         }
 
         public async Task HandleReplyAsync(int messageId, int userId, string text)
@@ -224,14 +228,13 @@ namespace ShitexpressBot
                 "email" => new KeyValuePair<string, string>("Email", "Reply with your email address.")
             };
 
+            // Invisible mention hack, so the selective ForceReplyMarkup only gets triggered for the mentioned user
             var message = await _bot.SendTextMessageAsync(_orderMessage.Chat, $"[ ](tg://user?id={_userId})" + text, ParseMode.Markdown, replyMarkup: new ForceReplyMarkup()
             {
                 Selective = true
             });
 
             Replies.Add(message.MessageId, propertyName);
-
-            await _bot.AnswerCallbackQueryAsync(callbackQueryId);
         }
 
         private async Task CancelOrderAsync(string callbackQueryId)
@@ -277,9 +280,9 @@ namespace ShitexpressBot
             var text = new StringBuilder()
                 .AppendLine("*Order ID:* " + split[0])
                 .AppendLine("*Address:* " + split[2])
-                .AppendLine("*BTC:* " + split[3])
+                .AppendLine("*Amount:* " + split[3])
                 .AppendLine()
-                .AppendLine("Please pay the amount to the provided blockchain address.");
+                .AppendLine("Please send the exact provided amount to the Bitcoin address.");
 
             await _bot.SendTextMessageAsync(_orderMessage.Chat, text.ToString(), ParseMode.Markdown,
                 replyMarkup: new InlineKeyboardMarkup(InlineKeyboardButton.WithSwitchInlineQueryCurrentChat("Check order status", split[0])));
