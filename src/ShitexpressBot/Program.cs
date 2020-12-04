@@ -1,10 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Text.Json;
 using System.Threading;
+using System.Threading.Tasks;
 using ShitexpressBot.Models;
 using Telegram.Bot;
 using Telegram.Bot.Args;
@@ -69,6 +71,8 @@ namespace ShitexpressBot
                         var orderMessage = await _bot.SendTextMessageAsync(message.Chat, "💩");
 
                         var order = new Order(_bot, orderMessage, message.From.Id);
+
+                        await Task.Delay(500);
 
                         await order.UpdateMessageAsync();
 
